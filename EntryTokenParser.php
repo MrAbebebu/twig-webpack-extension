@@ -1,6 +1,8 @@
 <?php
 
 namespace Fullpipe\Twig\Extension\Webpack;
+use Twig_Error_Loader;
+use Twig_Token;
 
 /**
  * EntryTokenParser.
@@ -34,7 +36,7 @@ class EntryTokenParser extends \Twig_TokenParser
      *
      * @param Twig_Token $token A Twig_Token instance
      *
-     * @return Twig_Node_Text
+     * @return \Twig_Node_Text
      *
      * @throws Twig_Error_Loader
      */
@@ -58,9 +60,11 @@ class EntryTokenParser extends \Twig_TokenParser
             throw new \Twig_Error_Loader('Webpack entry '.$entryName.'[.js] not exists.', $token->getLine(), $stream->getFilename());
         }
 
-        $entryPath = $this->publicPath.$entry;
+        $entryPath = '/'.$this->publicPath.$entry;
 
-        return new \Twig_Node_Text('<script type="text/javascript" src="'.$entryPath.'"></script>', $token->getLine());
+        $node = new \Twig_Node_Text('<script type="text/javascript" src="'.$entryPath.'"></script>', $token->getLine());
+
+        return $node;
     }
 
     /**
